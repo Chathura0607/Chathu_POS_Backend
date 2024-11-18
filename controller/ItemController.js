@@ -7,36 +7,22 @@ import {
   isItemExist,
 } from "../model/ItemModel.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+$(document).ready(() => {
   loadAllItems();
   generateNextItemCode();
 
-  document.getElementById("saveItemBtn").addEventListener("click", saveItem);
-  document
-    .getElementById("renewItemBtn")
-    .addEventListener("click", updateItemHandler);
-  document
-    .getElementById("deleteItemBtn")
-    .addEventListener("click", deleteItem);
-  document
-    .getElementById("viewAllItemsBtn")
-    .addEventListener("click", loadAllItems);
-  document
-    .getElementById("searchItemBtn")
-    .addEventListener("click", searchItem);
+  $("#saveItemBtn").click(saveItem);
+  $("#renewItemBtn").click(updateItemHandler);
+  $("#deleteItemBtn").click(deleteItem);
+  $("#viewAllItemsBtn").click(loadAllItems);
+  $("#searchItemBtn").click(searchItem);
 
-  document
-    .getElementById("item-table-body")
-    .addEventListener("click", (event) => {
-      if (event.target.tagName === "TD") {
-        const row = event.target.parentNode;
-        populateFieldsFromRow(row);
-      }
-    });
-
-  document.getElementById("clearItemBtn").addEventListener("click", () => {
-    clearFields();
+  $("#item-table-body").on("click", "td", function () {
+    const row = $(this).parent();
+    populateFieldsFromRow(row);
   });
+
+  $("#clearItemBtn").click(clearFields);
 });
 
 function loadAllItems() {
@@ -47,10 +33,10 @@ function loadAllItems() {
 function saveItem() {
   if (!validateItemForm()) return;
 
-  const code = document.getElementById("itemCode").value.trim();
-  const name = document.getElementById("itemName").value.trim();
-  const price = parseFloat(document.getElementById("itemPrice").value);
-  const quantity = parseInt(document.getElementById("itemQuantity").value);
+  const code = $("#itemCode").val().trim();
+  const name = $("#itemName").val().trim();
+  const price = parseFloat($("#itemPrice").val());
+  const quantity = parseInt($("#itemQuantity").val());
 
   if (!isItemExist(code)) {
     const item = new ItemDto(code, name, price, quantity);
@@ -73,10 +59,10 @@ function updateItemHandler() {
     return;
   }
 
-  const code = document.getElementById("itemCode").value.trim();
-  const name = document.getElementById("itemName").value.trim();
-  const price = parseFloat(document.getElementById("itemPrice").value);
-  const quantity = parseInt(document.getElementById("itemQuantity").value);
+  const code = $("#itemCode").val().trim();
+  const name = $("#itemName").val().trim();
+  const price = parseFloat($("#itemPrice").val());
+  const quantity = parseInt($("#itemQuantity").val());
 
   if (isItemExist(code)) {
     const updatedItem = new ItemDto(code, name, price, quantity);
@@ -94,7 +80,7 @@ function updateItemHandler() {
 }
 
 function deleteItem() {
-  const code = document.getElementById("itemCode").value.trim();
+  const code = $("#itemCode").val().trim();
 
   if (isItemExist(code)) {
     try {
@@ -112,8 +98,8 @@ function deleteItem() {
 }
 
 function searchItem() {
-  const searchValue = document.getElementById("searchItem").value.toLowerCase();
-  const searchBy = document.getElementById("searchItemBy").value;
+  const searchValue = $("#searchItem").val().toLowerCase();
+  const searchBy = $("#searchItemBy").val();
 
   const filteredItems = getAllItems().filter((item) =>
     searchBy === "name"
@@ -130,10 +116,10 @@ function searchItem() {
 }
 
 function populateFieldsFromRow(row) {
-  document.getElementById("itemCode").value = row.cells[0].textContent;
-  document.getElementById("itemName").value = row.cells[1].textContent;
-  document.getElementById("itemPrice").value = row.cells[2].textContent;
-  document.getElementById("itemQuantity").value = row.cells[3].textContent;
+  $("#itemCode").val(row.children().eq(0).text());
+  $("#itemName").val(row.children().eq(1).text());
+  $("#itemPrice").val(row.children().eq(2).text());
+  $("#itemQuantity").val(row.children().eq(3).text());
 }
 
 function generateNextItemCode() {
@@ -144,28 +130,25 @@ function generateNextItemCode() {
   const numberPart = parseInt(lastCode.slice(1)) + 1;
 
   const nextCode = "I" + numberPart.toString().padStart(3, "0");
-  document.getElementById("itemCode").value = nextCode;
+  $("#itemCode").val(nextCode);
 }
 
 function clearFields() {
-  document.getElementById("itemForm").reset();
-
-  document.getElementById("searchItem").value = "";
-
+  $("#itemForm")[0].reset();
+  $("#searchItem").val("");
   generateNextItemCode();
 
-  clearError("itemCodeError").textContent = "";
-  clearError("itemNameError").textContent = "";
-  clearError("itemPriceError").textContent = "";
-  clearError("itemQuantityError").textContent = "";
+  clearError("itemCodeError");
+  clearError("itemNameError");
+  clearError("itemPriceError");
+  clearError("itemQuantityError");
 }
 
 function clearTable() {
-  document.getElementById("item-table-body").innerHTML = "";
+  $("#item-table-body").empty();
 }
 
 function reloadTable(item) {
-  const tableBody = document.getElementById("item-table-body");
   const row = `
     <tr>
       <td>${item.code}</td>
@@ -173,16 +156,16 @@ function reloadTable(item) {
       <td>${item.price}</td>
       <td>${item.quantity}</td>
     </tr>`;
-  tableBody.innerHTML += row;
+  $("#item-table-body").append(row);
 }
 
 function validateItemForm() {
   let isValid = true;
 
-  const code = document.getElementById("itemCode").value.trim();
-  const name = document.getElementById("itemName").value.trim();
-  const price = document.getElementById("itemPrice").value.trim();
-  const quantity = document.getElementById("itemQuantity").value.trim();
+  const code = $("#itemCode").val().trim();
+  const name = $("#itemName").val().trim();
+  const price = $("#itemPrice").val().trim();
+  const quantity = $("#itemQuantity").val().trim();
 
   if (!/^[A-Za-z0-9]+$/.test(code)) {
     showError(
@@ -219,11 +202,9 @@ function validateItemForm() {
 }
 
 function showError(elementId, message) {
-  const errorElement = document.getElementById(elementId);
-  errorElement.textContent = message;
+  $("#" + elementId).text(message);
 }
 
 function clearError(elementId) {
-  const errorElement = document.getElementById(elementId);
-  errorElement.textContent = "";
+  $("#" + elementId).text("");
 }

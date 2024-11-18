@@ -7,38 +7,22 @@ import {
   isCustomerExist,
 } from "../model/CustomerModel.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+$(document).ready(() => {
   loadAllCustomers();
   generateNextCustomerID();
 
-  document
-    .getElementById("saveCustomerBtn")
-    .addEventListener("click", saveCustomer);
-  document
-    .getElementById("deleteBtn")
-    .addEventListener("click", deleteCustomer);
-  document
-    .getElementById("renewBtn")
-    .addEventListener("click", updateCustomerHandler);
-  document
-    .getElementById("viewAllBtn")
-    .addEventListener("click", loadAllCustomers);
-  document
-    .getElementById("searchBtn")
-    .addEventListener("click", searchCustomer);
+  $("#saveCustomerBtn").click(saveCustomer);
+  $("#deleteBtn").click(deleteCustomer);
+  $("#renewBtn").click(updateCustomerHandler);
+  $("#viewAllBtn").click(loadAllCustomers);
+  $("#searchBtn").click(searchCustomer);
 
-  document
-    .getElementById("cus-table-body")
-    .addEventListener("click", (event) => {
-      if (event.target.tagName === "TD") {
-        const row = event.target.parentNode;
-        populateFieldsFromRow(row);
-      }
-    });
-
-  document.getElementById("clearBtn").addEventListener("click", () => {
-    clearFields();
+  $("#cus-table-body").on("click", "td", function () {
+    const row = $(this).parent();
+    populateFieldsFromRow(row);
   });
+
+  $("#clearBtn").click(clearFields);
 });
 
 function loadAllCustomers() {
@@ -51,10 +35,10 @@ function saveCustomer() {
     return;
   }
 
-  const id = document.getElementById("cus-ID").value;
-  const name = document.getElementById("cus-name").value;
-  const address = document.getElementById("cus-address").value;
-  const mobile = document.getElementById("cus-mobile").value;
+  const id = $("#cus-ID").val();
+  const name = $("#cus-name").val();
+  const address = $("#cus-address").val();
+  const mobile = $("#cus-mobile").val();
 
   if (!isCustomerExist(id)) {
     const customer = new CustomerDto(id, name, address, mobile);
@@ -78,10 +62,10 @@ function updateCustomerHandler() {
     return;
   }
 
-  const id = document.getElementById("cus-ID").value;
-  const name = document.getElementById("cus-name").value;
-  const address = document.getElementById("cus-address").value;
-  const mobile = document.getElementById("cus-mobile").value;
+  const id = $("#cus-ID").val();
+  const name = $("#cus-name").val();
+  const address = $("#cus-address").val();
+  const mobile = $("#cus-mobile").val();
 
   if (isCustomerExist(id)) {
     const customer = new CustomerDto(id, name, address, mobile);
@@ -100,7 +84,7 @@ function updateCustomerHandler() {
 }
 
 function deleteCustomer() {
-  const id = document.getElementById("cus-ID").value;
+  const id = $("#cus-ID").val();
 
   if (isCustomerExist(id)) {
     removeCustomer(id);
@@ -113,10 +97,8 @@ function deleteCustomer() {
 }
 
 function searchCustomer() {
-  const searchValue = document
-    .getElementById("searchCustomer")
-    .value.toLowerCase();
-  const searchBy = document.getElementById("searchBy").value;
+  const searchValue = $("#searchCustomer").val().toLowerCase();
+  const searchBy = $("#searchBy").val();
 
   const filteredCustomers = getAllCustomers().filter((customer) =>
     searchBy === "name"
@@ -133,10 +115,10 @@ function searchCustomer() {
 }
 
 function populateFieldsFromRow(row) {
-  document.getElementById("cus-ID").value = row.cells[0].textContent;
-  document.getElementById("cus-name").value = row.cells[1].textContent;
-  document.getElementById("cus-address").value = row.cells[2].textContent;
-  document.getElementById("cus-mobile").value = row.cells[3].textContent;
+  $("#cus-ID").val(row.children().eq(0).text());
+  $("#cus-name").val(row.children().eq(1).text());
+  $("#cus-address").val(row.children().eq(2).text());
+  $("#cus-mobile").val(row.children().eq(3).text());
 }
 
 function generateNextCustomerID() {
@@ -148,28 +130,24 @@ function generateNextCustomerID() {
   const nextID = `${idParts[0]}-${(parseInt(idParts[1]) + 1)
     .toString()
     .padStart(3, "0")}`;
-  document.getElementById("cus-ID").value = nextID;
+  $("#cus-ID").val(nextID);
 }
 
 function clearFields() {
-  document.getElementById("customerForm").reset();
-
-  document.getElementById("searchCustomer").value = "";
-
+  $("#customerForm")[0].reset();
+  $("#searchCustomer").val("");
   generateNextCustomerID();
-
-  document.getElementById("cus-ID-error").textContent = "";
-  document.getElementById("cus-name-error").textContent = "";
-  document.getElementById("cus-address-error").textContent = "";
-  document.getElementById("cus-mobile-error").textContent = "";
+  $("#cus-ID-error").text("");
+  $("#cus-name-error").text("");
+  $("#cus-address-error").text("");
+  $("#cus-mobile-error").text("");
 }
 
 function clearTable() {
-  document.getElementById("cus-table-body").innerHTML = "";
+  $("#cus-table-body").empty();
 }
 
 function reloadTable(customer) {
-  const tableBody = document.getElementById("cus-table-body");
   const row = `
     <tr>
       <td>${customer.id}</td>
@@ -177,16 +155,16 @@ function reloadTable(customer) {
       <td>${customer.address}</td>
       <td>${customer.mobile}</td>
     </tr>`;
-  tableBody.innerHTML += row;
+  $("#cus-table-body").append(row);
 }
 
 function validateCustomerForm() {
   let isValid = true;
 
-  const id = document.getElementById("cus-ID").value.trim();
-  const name = document.getElementById("cus-name").value.trim();
-  const address = document.getElementById("cus-address").value.trim();
-  const mobile = document.getElementById("cus-mobile").value.trim();
+  const id = $("#cus-ID").val().trim();
+  const name = $("#cus-name").val().trim();
+  const address = $("#cus-address").val().trim();
+  const mobile = $("#cus-mobile").val().trim();
 
   if (!/^C\d{2}-\d{3}$/.test(id)) {
     showError("cus-ID-error", "Customer ID must follow the format C00-001");
@@ -226,11 +204,9 @@ function validateCustomerForm() {
 }
 
 function showError(elementId, message) {
-  const errorElement = document.getElementById(elementId);
-  errorElement.textContent = message;
+  $(`#${elementId}`).text(message);
 }
 
 function clearError(elementId) {
-  const errorElement = document.getElementById(elementId);
-  errorElement.textContent = "";
+  $(`#${elementId}`).text("");
 }
