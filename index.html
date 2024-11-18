@@ -57,9 +57,6 @@
                   <button id="deleteBtn" class="btn btn-danger me-2">
                     Delete
                   </button>
-                  <button id="detailsBtn" class="btn btn-info me-2">
-                    Details
-                  </button>
                   <button id="clearBtn" class="btn btn-success me-2">
                     Clear
                   </button>
@@ -90,16 +87,13 @@
                     <th>Mobile Number</th>
                   </tr>
                 </thead>
-                <tbody id="cus-table-body">
-                  <!-- Dynamically generated rows will appear here -->
-                </tbody>
+                <tbody id="cus-table-body"></tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- New Customer Modal -->
       <div
         class="modal fade"
         id="newCustomerModal"
@@ -200,20 +194,26 @@
                 <h5>Item Search</h5>
                 <input
                   type="text"
+                  id="searchItem"
                   class="form-control mb-2"
                   placeholder="Input Item Name/ Code Here"
                 />
                 <div class="d-flex align-items-center mb-2">
-                  <button class="btn btn-success me-2">Search</button>
-                  <select class="form-select">
-                    <option selected>Name</option>
-                    <option>Code</option>
+                  <button id="searchItemBtn" class="btn btn-success me-2">
+                    Search
+                  </button>
+                  <select id="searchItemBy" class="form-select">
+                    <option value="name" selected>Name</option>
+                    <option value="code">Code</option>
                   </select>
                 </div>
                 <div>
-                  <button class="btn btn-danger me-2">Delete</button>
-                  <button class="btn btn-info me-2">Details</button>
-                  <button class="btn btn-success me-2">Clear</button>
+                  <button id="deleteItemBtn" class="btn btn-danger me-2">
+                    Delete
+                  </button>
+                  <button id="clearItemBtn" class="btn btn-success me-2">
+                    Clear
+                  </button>
                 </div>
               </div>
 
@@ -225,7 +225,9 @@
                 >
                   New Item
                 </button>
-                <button class="btn btn-warning">View All Items</button>
+                <button id="viewAllItemsBtn" class="btn btn-warning">
+                  View All Items
+                </button>
               </div>
             </div>
 
@@ -239,14 +241,7 @@
                     <th>Quantity</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>I001</td>
-                    <td>Keerisamba</td>
-                    <td>300</td>
-                    <td>55</td>
-                  </tr>
-                </tbody>
+                <tbody id="item-table-body"></tbody>
               </table>
             </div>
           </div>
@@ -272,50 +267,43 @@
               ></button>
             </div>
             <div class="modal-body">
-              <form>
+              <form id="itemForm">
                 <div class="mb-3">
                   <label for="itemCode" class="form-label">Item Code</label>
                   <input
                     type="text"
                     class="form-control"
                     id="itemCode"
-                    placeholder="Enter Item Code"
+                    readonly
                   />
+                  <small id="itemCodeError" class="text-danger"></small>
                 </div>
                 <div class="mb-3">
                   <label for="itemName" class="form-label">Item Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="itemName"
-                    placeholder="Enter Item Name"
-                  />
+                  <input type="text" class="form-control" id="itemName" />
+                  <small id="itemNameError" class="text-danger"></small>
                 </div>
                 <div class="mb-3">
                   <label for="itemPrice" class="form-label">Item Price</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="itemPrice"
-                    placeholder="Enter Item Price"
-                  />
+                  <input type="number" class="form-control" id="itemPrice" />
+                  <small id="itemPriceError" class="text-danger"></small>
                 </div>
                 <div class="mb-3">
                   <label for="itemQuantity" class="form-label"
                     >Item Quantity</label
                   >
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="itemQuantity"
-                    placeholder="Enter Item Quantity"
-                  />
+                  <input type="number" class="form-control" id="itemQuantity" />
+                  <small id="itemQuantityError" class="text-danger"></small>
                 </div>
               </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger">Save</button>
-              <button type="button" class="btn btn-warning">Renew</button>
+              <button id="saveItemBtn" type="button" class="btn btn-danger">
+                Save
+              </button>
+              <button id="renewItemBtn" type="button" class="btn btn-warning">
+                Renew
+              </button>
               <button
                 type="button"
                 class="btn btn-secondary"
@@ -328,6 +316,140 @@
         </div>
       </div>
     </section>
+
+    <!-- <section id="item" class="d-none">
+      <div class="container mt-5 pt-5">
+        <h2>Items</h2>
+        <div class="card">
+          <div class="card-header bg-success text-white">Items</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3">
+                <h5>Item Search</h5>
+                <input
+                  type="text"
+                  id="searchItem"
+                  class="form-control mb-2"
+                  placeholder="Input Item Name/ Code Here"
+                />
+                <div class="d-flex align-items-center mb-2">
+                  <button id="searchItemBtn" class="btn btn-success me-2">
+                    Search
+                  </button>
+                  <select id="searchItemBy" class="form-select">
+                    <option value="name" selected>Name</option>
+                    <option value="code">Code</option>
+                  </select>
+                </div>
+                <div>
+                  <button id="deleteItemBtn" class="btn btn-danger me-2">
+                    Delete
+                  </button>
+                  <button id="clearBtn" class="btn btn-success me-2">
+                    Clear
+                  </button>
+                </div>
+              </div>
+
+              <div class="col-md-9 text-end">
+                <button
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newItemModal"
+                >
+                  New Item
+                </button>
+                <button id="viewAllItemsBtn" class="btn btn-warning">
+                  View All Items
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive mt-3">
+              <table class="table table-bordered">
+                <thead class="table-success">
+                  <tr>
+                    <th>Item Code</th>
+                    <th>Item Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody id="item-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="newItemModal"
+        tabindex="-1"
+        aria-labelledby="newItemModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+              <h5 class="modal-title" id="newItemModalLabel">New Item</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form id="itemForm">
+                <div class="mb-3">
+                  <label for="itemCode" class="form-label">Item Code</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="itemCode"
+                    readonly
+                  />
+                  <small id="itemCodeError" class="text-danger"></small>
+                </div>
+                <div class="mb-3">
+                  <label for="itemName" class="form-label">Item Name</label>
+                  <input type="text" class="form-control" id="itemName" />
+                  <small id="itemNameError" class="text-danger"></small>
+                </div>
+                <div class="mb-3">
+                  <label for="itemPrice" class="form-label">Item Price</label>
+                  <input type="number" class="form-control" id="itemPrice" />
+                  <small id="itemPriceError" class="text-danger"></small>
+                </div>
+                <div class="mb-3">
+                  <label for="itemQuantity" class="form-label"
+                    >Item Quantity</label
+                  >
+                  <input type="number" class="form-control" id="itemQuantity" />
+                  <small id="itemQuantityError" class="text-danger"></small>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button id="saveItemBtn" type="button" class="btn btn-danger">
+                Save
+              </button>
+              <button id="renewBtn" type="button" class="btn btn-warning">
+                Renew
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
 
     <section id="order" class="d-none">
       <div class="container mt-5 pt-5">
@@ -565,5 +687,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="/util/navigation.js"></script>
     <script type="module" src="/controller/CustomerController.js"></script>
+    <script type="module" src="/controller/ItemController.js"></script>
   </body>
 </html>
