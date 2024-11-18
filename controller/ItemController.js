@@ -39,15 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Load all items into the table
 function loadAllItems() {
   clearTable();
   getAllItems().forEach((item) => reloadTable(item));
 }
 
-// Save item
 function saveItem() {
-  if (!validateItemForm()) return; // Stop if validation fails
+  if (!validateItemForm()) return;
 
   const code = document.getElementById("itemCode").value.trim();
   const name = document.getElementById("itemName").value.trim();
@@ -57,10 +55,10 @@ function saveItem() {
   if (!isItemExist(code)) {
     const item = new ItemDto(code, name, price, quantity);
     try {
-      addItem(item); // Add item to the database
-      loadAllItems(); // Reload table
-      clearFields(); // Reset form
-      generateNextItemCode(); // Generate the next item code
+      addItem(item);
+      loadAllItems();
+      clearFields();
+      generateNextItemCode();
       alert("Item Added Successfully!");
     } catch (error) {
       alert("Error Adding Item: " + error.message);
@@ -70,7 +68,6 @@ function saveItem() {
   }
 }
 
-// Update item
 function updateItemHandler() {
   if (!validateItemForm()) {
     return;
@@ -84,9 +81,9 @@ function updateItemHandler() {
   if (isItemExist(code)) {
     const updatedItem = new ItemDto(code, name, price, quantity);
     try {
-      updateItem(updatedItem); // Update the item in the database
-      loadAllItems(); // Refresh table
-      clearFields(); // Reset form
+      updateItem(updatedItem);
+      loadAllItems();
+      clearFields();
       alert("Item Updated Successfully!");
     } catch (error) {
       alert("Error Updating Item: " + error.message);
@@ -96,16 +93,15 @@ function updateItemHandler() {
   }
 }
 
-// Delete item
 function deleteItem() {
   const code = document.getElementById("itemCode").value.trim();
 
   if (isItemExist(code)) {
     try {
-      removeItem(code); // Remove item from database
-      loadAllItems(); // Refresh table
-      clearFields(); // Reset form
-      generateNextItemCode(); // Generate the next item code
+      removeItem(code);
+      loadAllItems();
+      clearFields();
+      generateNextItemCode();
       alert("Item Deleted Successfully!");
     } catch (error) {
       alert("Error Deleting Item: " + error.message);
@@ -115,7 +111,6 @@ function deleteItem() {
   }
 }
 
-// Search items
 function searchItem() {
   const searchValue = document.getElementById("searchItem").value.toLowerCase();
   const searchBy = document.getElementById("searchItemBy").value;
@@ -134,7 +129,6 @@ function searchItem() {
   }
 }
 
-// Populate form fields from a selected table row
 function populateFieldsFromRow(row) {
   document.getElementById("itemCode").value = row.cells[0].textContent;
   document.getElementById("itemName").value = row.cells[1].textContent;
@@ -142,44 +136,34 @@ function populateFieldsFromRow(row) {
   document.getElementById("itemQuantity").value = row.cells[3].textContent;
 }
 
-// Generate the next item code
 function generateNextItemCode() {
   const items = getAllItems();
   const lastItem = items[items.length - 1];
   const lastCode = lastItem ? lastItem.code : "I000";
 
-  // Extract the numeric part of the code and increment it
   const numberPart = parseInt(lastCode.slice(1)) + 1;
 
-  // Generate the next code
   const nextCode = "I" + numberPart.toString().padStart(3, "0");
   document.getElementById("itemCode").value = nextCode;
 }
 
-// Clear form fields
 function clearFields() {
-  // Reset the form fields
   document.getElementById("itemForm").reset();
 
-  // Clear the search field
-  document.getElementById("searchItem").value = ""; // Explicitly clear the search field
+  document.getElementById("searchItem").value = "";
 
-  // Generate the next item code
   generateNextItemCode();
 
-  // Clear all error messages
   clearError("itemCodeError").textContent = "";
   clearError("itemNameError").textContent = "";
   clearError("itemPriceError").textContent = "";
   clearError("itemQuantityError").textContent = "";
 }
 
-// Clear the table body
 function clearTable() {
   document.getElementById("item-table-body").innerHTML = "";
 }
 
-// Reload the table with a single item
 function reloadTable(item) {
   const tableBody = document.getElementById("item-table-body");
   const row = `
@@ -192,7 +176,6 @@ function reloadTable(item) {
   tableBody.innerHTML += row;
 }
 
-// Validate item form
 function validateItemForm() {
   let isValid = true;
 
@@ -201,7 +184,6 @@ function validateItemForm() {
   const price = document.getElementById("itemPrice").value.trim();
   const quantity = document.getElementById("itemQuantity").value.trim();
 
-  // Validate code
   if (!/^[A-Za-z0-9]+$/.test(code)) {
     showError(
       "itemCodeError",
@@ -212,7 +194,6 @@ function validateItemForm() {
     clearError("itemCodeError");
   }
 
-  // Validate name
   if (name.length < 2) {
     showError("itemNameError", "Item Name must be at least 2 characters long.");
     isValid = false;
@@ -220,7 +201,6 @@ function validateItemForm() {
     clearError("itemNameError");
   }
 
-  // Validate price
   if (!price || isNaN(price) || parseFloat(price) <= 0) {
     showError("itemPriceError", "Price must be a positive number.");
     isValid = false;
@@ -228,7 +208,6 @@ function validateItemForm() {
     clearError("itemPriceError");
   }
 
-  // Validate quantity
   if (!quantity || isNaN(quantity) || parseInt(quantity) < 0) {
     showError("itemQuantityError", "Quantity must be a non-negative integer.");
     isValid = false;
@@ -239,13 +218,11 @@ function validateItemForm() {
   return isValid;
 }
 
-// Show an error message
 function showError(elementId, message) {
   const errorElement = document.getElementById(elementId);
   errorElement.textContent = message;
 }
 
-// Clear an error message
 function clearError(elementId) {
   const errorElement = document.getElementById(elementId);
   errorElement.textContent = "";
