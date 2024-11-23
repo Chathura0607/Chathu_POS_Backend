@@ -17,17 +17,9 @@ $(document).ready(() => {
   $("#viewAllBtn").click(loadAllCustomers);
   $("#searchBtn").click(searchCustomer);
 
-  document
-    .getElementById("cus-table-body")
-    .addEventListener("click", (event) => {
-      if (event.target.tagName === "TD") {
-        const row = event.target.parentNode;
-        populateFieldsFromRow(row);
-      }
-    });
-
-  document.getElementById("clearBtn").addEventListener("click", () => {
-    clearFields();
+  $("#cus-table-body").on("click", "td", function () {
+    const row = $(this).closest("tr");
+    populateFieldsFromRow(row);
   });
 
   $("#clearBtn").click(clearFields);
@@ -119,10 +111,10 @@ function searchCustomer() {
 }
 
 function populateFieldsFromRow(row) {
-  document.getElementById("cus-ID").value = row.cells[0].textContent;
-  document.getElementById("cus-name").value = row.cells[1].textContent;
-  document.getElementById("cus-address").value = row.cells[2].textContent;
-  document.getElementById("cus-mobile").value = row.cells[3].textContent;
+  $("#cus-ID").val(row.find("td:eq(0)").text());
+  $("#cus-name").val(row.find("td:eq(1)").text());
+  $("#cus-address").val(row.find("td:eq(2)").text());
+  $("#cus-mobile").val(row.find("td:eq(3)").text());
 }
 
 function generateNextCustomerID() {
@@ -142,10 +134,10 @@ function clearFields() {
   $("#searchCustomer").val("");
   generateNextCustomerID();
 
-  document.getElementById("cus-ID-error").textContent = "";
-  document.getElementById("cus-name-error").textContent = "";
-  document.getElementById("cus-address-error").textContent = "";
-  document.getElementById("cus-mobile-error").textContent = "";
+  $("#cus-ID-error").text("");
+  $("#cus-name-error").text("");
+  $("#cus-address-error").text("");
+  $("#cus-mobile-error").text("");
 }
 
 function clearTable() {
