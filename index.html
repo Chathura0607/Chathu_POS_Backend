@@ -319,7 +319,7 @@
 
     <section id="order" class="d-none">
       <div class="container mt-5 pt-5">
-        <h2>Orders</h2>
+        <h2>Order Management</h2>
         <div class="row">
           <div class="col-md-4">
             <div class="card">
@@ -327,74 +327,133 @@
                 Invoice Details
               </div>
               <div class="card-body">
-                <form>
+                <form id="order-form">
+                  <div class="d-flex mb-4 mt-3">
+                    <div class="w-100 d-flex flex-column">
+                      <input
+                        type="text"
+                        id="txt-search-order"
+                        class="form-control border-1 border-dark-subtle rounded-1"
+                        placeholder="Enter Order ID"
+                        pattern="^O[0-9]{3,}$"
+                      />
+                      <div class="invalid-feedback error-bg">
+                        Order ID is required [ Pattern : O00X ]
+                      </div>
+                    </div>
+                    <div class="ms-2">
+                      <button type="submit" class="btn btn-success rounded-1">
+                        Search
+                      </button>
+                    </div>
+                  </div>
+
                   <div class="row mb-3">
                     <div class="col-md-6">
-                      <label for="orderID" class="form-label">Order ID:</label>
+                      <label for="txt-order-id" class="form-label"
+                        >Order ID:</label
+                      >
                       <input
                         type="text"
                         class="form-control"
-                        id="orderID"
-                        placeholder="D001"
+                        id="txt-order-id"
+                        readonly
                       />
                     </div>
                     <div class="col-md-6">
-                      <label for="date" class="form-label">Date:</label>
+                      <label for="txt-order-date" class="form-label"
+                        >Date:</label
+                      >
                       <input
                         type="date"
                         class="form-control"
-                        id="date"
-                        value="2020-06-07"
+                        id="txt-order-date"
                       />
                     </div>
                   </div>
+
                   <div class="row mb-3">
                     <div class="col-md-6">
-                      <label for="customer" class="form-label">Customer:</label>
-                      <select class="form-select" id="customer">
-                        <option value="C003">C003</option>
-                      </select>
+                      <label for="select-customer-id" class="form-label"
+                        >Customer:</label
+                      >
+                      <select
+                        class="form-select"
+                        id="select-customer-id"
+                      ></select>
                     </div>
                     <div class="col-md-6">
-                      <label for="customerID" class="form-label"
+                      <label for="txt-customer-id" class="form-label"
                         >Customer ID:</label
                       >
                       <input
                         type="text"
                         class="form-control"
-                        id="customerID"
-                        placeholder="C003"
+                        id="txt-customer-id"
+                        readonly
                       />
                     </div>
                   </div>
+
                   <div class="row mb-3">
                     <div class="col-md-6">
-                      <label for="name" class="form-label">Name:</label>
+                      <label for="txt-customer-name" class="form-label"
+                        >Name:</label
+                      >
                       <input
                         type="text"
                         class="form-control"
-                        id="name"
-                        placeholder="Malitha"
+                        id="txt-customer-name"
+                        readonly
                       />
                     </div>
                     <div class="col-md-6">
-                      <label for="salary" class="form-label">Salary:</label>
+                      <label for="txt-customer-salary" class="form-label"
+                        >Salary:</label
+                      >
                       <input
                         type="number"
                         class="form-control"
-                        id="salary"
-                        placeholder="10000.00"
+                        id="txt-customer-salary"
+                        readonly
                       />
                     </div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="address" class="form-label">Address:</label>
+                    <label for="txt-customer-address" class="form-label"
+                      >Address:</label
+                    >
                     <input
                       type="text"
                       class="form-control"
-                      id="address"
-                      placeholder="Panadura"
+                      id="txt-customer-address"
+                      readonly
                     />
+                  </div>
+
+                  <div class="button-set order-btns mb-3 d-flex gap-1">
+                    <button
+                      type="button"
+                      id="delete-order-btn"
+                      class="btn btn-danger px-4 rounded-1"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      type="button"
+                      id="update-order-btn"
+                      class="btn btn-info text-white px-4 rounded-1"
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      id="clear-order-btn"
+                      class="btn btn-success px-4 rounded-1"
+                    >
+                      Clear
+                    </button>
                   </div>
                 </form>
               </div>
@@ -407,71 +466,81 @@
               <div class="card-body">
                 <form>
                   <div class="mb-3">
-                    <label for="item" class="form-label">Item:</label>
-                    <select class="form-select" id="item">
-                      <option value="P002">P002</option>
-                    </select>
+                    <label for="select-item-code" class="form-label"
+                      >Item:</label
+                    >
+                    <select class="form-select" id="select-item-code"></select>
                   </div>
+
                   <div class="row mb-3">
                     <div class="col-md-6">
-                      <label for="itemCode" class="form-label"
+                      <label for="txt-item-code" class="form-label"
                         >Item Code:</label
                       >
                       <input
                         type="text"
                         class="form-control"
-                        id="itemCode"
-                        placeholder="P002"
-                        value="P002"
+                        id="txt-item-code"
+                        readonly
                       />
                     </div>
                     <div class="col-md-6">
-                      <label for="qtyOnH" class="form-label">QtyOnH:</label>
+                      <label for="txt-item-qty" class="form-label"
+                        >Qty On Hand:</label
+                      >
                       <input
                         type="number"
                         class="form-control"
-                        id="qtyOnH"
-                        placeholder="200"
-                        value="200"
+                        id="txt-item-qty"
+                        readonly
                       />
                     </div>
                   </div>
+
                   <div class="row mb-3">
                     <div class="col-md-6">
-                      <label for="itemName" class="form-label"
+                      <label for="txt-item-name" class="form-label"
                         >Item Name:</label
                       >
                       <input
                         type="text"
                         class="form-control"
-                        id="itemName"
-                        placeholder="Keerisamba 5Kg"
-                        value="Keerisamba 5Kg"
+                        id="txt-item-name"
+                        readonly
                       />
                     </div>
                     <div class="col-md-6">
-                      <label for="price" class="form-label">Price:</label>
+                      <label for="txt-item-price" class="form-label"
+                        >Price:</label
+                      >
                       <input
                         type="number"
                         class="form-control"
-                        id="price"
-                        placeholder="525.00"
-                        value="525.00"
+                        id="txt-item-price"
+                        readonly
                       />
                     </div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="orderQuantity" class="form-label"
+                    <label for="txt-order-qty" class="form-label"
                       >Order Quantity:</label
                     >
                     <input
                       type="number"
                       class="form-control"
-                      id="orderQuantity"
-                      value="2"
+                      id="txt-order-qty"
+                      value="1"
                     />
                   </div>
-                  <button type="button" class="btn btn-danger">Add Item</button>
+
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="add-item-btn"
+                  >
+                    Add Item
+                  </button>
                 </form>
               </div>
             </div>
@@ -481,43 +550,57 @@
             <div class="card">
               <div class="card-header bg-success text-white">Summary</div>
               <div class="card-body">
-                <p><strong class="text-primary">Total: 1050 Rs/=</strong></p>
-                <p><strong class="text-danger">SubTotal: 945 Rs/=</strong></p>
+                <p>
+                  <strong class="text-primary" id="lbl-total"
+                    >Total: 0 Rs/=</strong
+                  >
+                </p>
+                <p>
+                  <strong class="text-danger" id="lbl-subtotal"
+                    >SubTotal: 0 Rs/=</strong
+                  >
+                </p>
 
                 <div class="row mb-3">
                   <div class="col-md-6">
-                    <label for="cash" class="form-label">Cash</label>
+                    <label for="txt-order-cash" class="form-label">Cash</label>
                     <input
                       type="number"
                       class="form-control"
-                      id="cash"
-                      placeholder="5000"
-                      value="5000"
+                      id="txt-order-cash"
                     />
                   </div>
                   <div class="col-md-6">
-                    <label for="discount" class="form-label">Discount</label>
+                    <label for="txt-order-discount" class="form-label"
+                      >Discount</label
+                    >
                     <input
                       type="number"
                       class="form-control"
-                      id="discount"
-                      placeholder="10"
-                      value="10"
+                      id="txt-order-discount"
                     />
                   </div>
                 </div>
+
                 <div class="mb-3">
-                  <label for="balance" class="form-label">Balance</label>
+                  <label for="txt-order-balance" class="form-label"
+                    >Balance</label
+                  >
                   <input
                     type="number"
                     class="form-control"
-                    id="balance"
-                    placeholder="4055"
-                    value="4055"
+                    id="txt-order-balance"
+                    readonly
                   />
                 </div>
 
-                <button type="button" class="btn btn-success">Purchase</button>
+                <button
+                  type="button"
+                  class="btn btn-success"
+                  id="pay-order-btn"
+                >
+                  Purchase
+                </button>
               </div>
             </div>
           </div>
@@ -533,17 +616,10 @@
                   <th>Price</th>
                   <th>Quantity</th>
                   <th>Total</th>
+                  <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>P002</td>
-                  <td>Keerisamba 5Kg</td>
-                  <td>525.00</td>
-                  <td>2</td>
-                  <td>1050</td>
-                </tr>
-              </tbody>
+              <tbody id="order-detail-tbody"></tbody>
             </table>
           </div>
         </div>
@@ -551,8 +627,11 @@
     </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="/util/navigation.js"></script>
     <script type="module" src="/controller/CustomerController.js"></script>
     <script type="module" src="/controller/ItemController.js"></script>
+    <script type="module" src="/controller/OrderController.js"></script>
   </body>
 </html>
