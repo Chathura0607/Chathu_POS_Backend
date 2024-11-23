@@ -17,9 +17,17 @@ $(document).ready(() => {
   $("#viewAllItemsBtn").click(loadAllItems);
   $("#searchItemBtn").click(searchItem);
 
-  $("#item-table-body").on("click", "td", function () {
-    const row = $(this).closest("tr");
-    populateFieldsFromRow(row);
+  document
+    .getElementById("item-table-body")
+    .addEventListener("click", (event) => {
+      if (event.target.tagName === "TD") {
+        const row = event.target.parentNode;
+        populateFieldsFromRow(row);
+      }
+    });
+
+  document.getElementById("clearItemBtn").addEventListener("click", () => {
+    clearFields();
   });
 
   $("#clearItemBtn").click(clearFields);
@@ -114,10 +122,10 @@ function searchItem() {
 }
 
 function populateFieldsFromRow(row) {
-  $("#itemCode").val(row.find("td").eq(0).text());
-  $("#itemName").val(row.find("td").eq(1).text());
-  $("#itemPrice").val(row.find("td").eq(2).text());
-  $("#itemQuantity").val(row.find("td").eq(3).text());
+  document.getElementById("itemCode").value = row.cells[0].textContent;
+  document.getElementById("itemName").value = row.cells[1].textContent;
+  document.getElementById("itemPrice").value = row.cells[2].textContent;
+  document.getElementById("itemQuantity").value = row.cells[3].textContent;
 }
 
 function generateNextItemCode() {
@@ -132,16 +140,16 @@ function generateNextItemCode() {
 }
 
 function clearFields() {
-  $("#itemForm")[0].reset();
+  document.getElementById("itemForm").reset();
 
-  $("#searchItem").val("");
+  document.getElementById("searchItem").value = "";
 
   generateNextItemCode();
 
-  $("#itemCodeError").text("");
-  $("#itemNameError").text("");
-  $("#itemPriceError").text("");
-  $("#itemQuantityError").text("");
+  clearError("itemCodeError").textContent = "";
+  clearError("itemNameError").textContent = "";
+  clearError("itemPriceError").textContent = "";
+  clearError("itemQuantityError").textContent = "";
 }
 
 function clearTable() {
@@ -204,10 +212,12 @@ function validateItemForm() {
   return isValid;
 }
 
-function showError(selector, message) {
-  $(selector).text(message);
+function showError(elementId, message) {
+  const errorElement = document.getElementById(elementId);
+  errorElement.textContent = message;
 }
 
-function clearError(selector) {
-  $(selector).text("");
+function clearError(elementId) {
+  const errorElement = document.getElementById(elementId);
+  errorElement.textContent = "";
 }
